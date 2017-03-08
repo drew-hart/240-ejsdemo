@@ -9,9 +9,7 @@ app.get('/', (req, res) => {
   res.render('home');
 });
 
-app.get('/fallinlovewith/:thing', (req, res) => {
-  const thing = req.params.thing;
-  res.render('love', { thingVar: thing });
+app.get('/friends', (req, res) => {
+  res.render('friends');
 });
-
 app.listen(8080);
