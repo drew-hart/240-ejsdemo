@@ -1,23 +1,23 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+const request = require('request');
 
 const app = express();
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
-const friends = ['Tony', 'Miranda', 'Justin', 'Pierre', 'Lily'];
-
 app.get('/', (req, res) => {
-  res.render('home');
+  res.render('search');
+});
+app.get('/results', (req, res) => {
+  const query = req.query.term;
+  const url = 'http://www.omdbapi.com/?s=' + query;
+  request(url, (error, response, body) => {
+    if (!error && response.statusCode === 200) {
+      const data = JSON.parse(body);
+      res.render('results', { data: data });
+    }
+  });
 });
 
-app.post('/addfriend', (req, res) => {
-  friends.push(req.body.name);
-  res.redirect('/friends');
+app.listen(8080, () => {
+  console.log('Application started...');
 });
-
-app.get('/friends', (req, res) => {
-  res.render('friends', { friends: friends });
-});
-app.listen(8080);
