@@ -9,11 +9,13 @@ app.get('/', (req, res) => {
 });
 app.get('/results', (req, res) => {
   const query = req.query.term;
-  const url = 'http://www.omdbapi.com/?s=' + query;
+  const base = 'http://www.omdbapi.com/?s=';
+  const url = base + query;
+
   request(url, (error, response, body) => {
     if (!error && response.statusCode === 200) {
       const data = JSON.parse(body);
-      res.render('results', { data: data });
+      res.render('results', { data });
     }
   });
 });
